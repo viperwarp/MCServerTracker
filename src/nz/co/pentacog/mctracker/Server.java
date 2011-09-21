@@ -23,6 +23,7 @@ public class Server {
 	public int playerCount = 0;
 	public int maxPlayers = 0;
 	public String motd = "";
+	public boolean queried = false;
 
 	/**
 	 * 

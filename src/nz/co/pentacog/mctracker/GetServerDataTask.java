@@ -70,20 +70,22 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 				e.printStackTrace();
 			}
 
-			parts = message.split("§");
+			parts = message.split("\u00A7");
 			
 			if (parts.length == 3) {
 				server.motd = parts[0];
 				server.playerCount = Integer.parseInt(parts[1]);
 				server.maxPlayers = Integer.parseInt(parts[2]);
+				
 			} else {
 				error = "Invalid number of arguments";
 			}
 			
+			
 		} catch (IOException e) {
 			error = e.getLocalizedMessage();
 		}
-		
+		server.queried = true;
 		return error;
 	}
 	

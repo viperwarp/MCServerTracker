@@ -69,7 +69,7 @@ public class MCServerTrackerActivity extends ListActivity {
 
     }
     
-    public synchronized void updateListView() {
+    public void updateListView() {
     	ServerListAdapter adapter = (ServerListAdapter) MCServerTrackerActivity.this.getListAdapter();
 		adapter.notifyDataSetChanged();
     }
