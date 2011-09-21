@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, MCServerTrackerActivity!</string>
     <string name="app_name">MCServerTracker</string>
     <string name="server_version_error">Server is running an incompatible version</string>
 </resources>

@@ -41,6 +41,7 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 			serverList.add(new Server("My Server", InetAddress.getByName("119.224.43.89")));
 			serverList.add(new Server("Blake's Server", InetAddress.getByName("182.160.139.146")));
 			serverList.add(new Server("1.7 Server via URL", InetAddress.getByName("server.aussiegamerhub.com")));
+			serverList.add(new Server("Localhost - No Server", InetAddress.getByName("localhost")));
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
