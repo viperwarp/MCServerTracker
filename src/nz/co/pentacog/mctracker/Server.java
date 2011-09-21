@@ -11,6 +11,10 @@ import java.net.InetAddress;
  */
 public class Server {
 	
+	public static final String SERVER_NAME = "serverName";
+	public static final String SERVER_ADDRESS = "serverAddress";
+	public static final String SERVER_PORT = "serverPort";
+	
 	public String name = "";
 	public InetAddress address = null;
 	public int port = 25565;
@@ -27,5 +31,6 @@ public class Server {
 		this.name = name;
 		this.address = address;
 	}
+	
 
 }

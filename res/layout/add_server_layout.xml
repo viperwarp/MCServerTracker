@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-    <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Server Name"></TextView>
-    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/editText1" android:hint="Server Name">
-        <requestFocus></requestFocus>
-    </EditText>
-    <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Server Address"></TextView>
-    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/editText2" android:hint="Server IP/URL"></EditText>
-    <TextView android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Server Port"></TextView>
-    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/editText3" android:inputType="number" android:text="25565"></EditText>
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:id="@+id/submitButton" android:text="Add Server" android:onClick="submit"></Button>
-    
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<TextView android:id="@+id/textView1" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="@string/server_name"></TextView>
+	<EditText android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:hint="Server Name" android:id="@+id/serverNameEdit">
+		<requestFocus></requestFocus>
+	</EditText>
+	<TextView android:id="@+id/textView2" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="@string/server_address"></TextView>
+	<EditText android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:hint="Server IP/URL" android:id="@+id/serverAddressEdit"></EditText>
+	<TextView android:id="@+id/textView3" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="@string/server_port"></TextView>
+	<EditText android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:inputType="number" android:text="25565" android:id="@+id/serverPortEdit"></EditText>
+	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_gravity="center"
+		android:id="@+id/submitButton" android:text="@string/add_server"
+		android:onClick="submit"></Button>
+
 </LinearLayout>

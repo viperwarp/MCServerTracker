@@ -13,13 +13,12 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,18 +26,22 @@ import android.widget.TextView;
  * @author Affian
  *
  */
-public class ServerListAdapter implements ListAdapter, Filterable {
+public class ServerListAdapter extends BaseAdapter implements Filterable {
 	
 	private ArrayList<Server> serverList = null;
 
+	public ServerListAdapter() {
+		this(new ArrayList<Server>());
+	}
+	
 	/**
 	 * 
 	 */
-	public ServerListAdapter() {
-		serverList = new ArrayList<Server>();
+	public ServerListAdapter(ArrayList<Server> serverList) {
+		this.serverList = serverList;
 		
 		try {
-			serverList.add(new Server("My Server", InetAddress.getByName("119.224.43.89")));
+			serverList.add(new Server("My Server", InetAddress.getByName("192.168.2.118")));
 			serverList.add(new Server("Blake's Server", InetAddress.getByName("182.160.139.146")));
 			serverList.add(new Server("1.7 Server via URL", InetAddress.getByName("server.aussiegamerhub.com")));
 			serverList.add(new Server("Localhost - No Server", InetAddress.getByName("localhost")));
@@ -120,7 +123,7 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 				e.printStackTrace();
 			}
 
-			parts = message.split("¤");
+			parts = message.split("§");
 			
 			if (parts.length == 3) {
 				server.motd = parts[0];
@@ -161,6 +164,8 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 		} else {
 			/*
 			 * No Internet = "Network Unreachable"
+			 * open port but no server = "The operation timed out"
+			 * No open ports = <address> - Connection refused
 			 */
 			
 			TextView playerCount = (TextView) serverView.findViewById(R.id.playerCount);
@@ -202,21 +207,7 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 		return serverList.isEmpty();
 	}
 
-	/* (non-Javadoc)
-	 * @see android.widget.Adapter#registerDataSetObserver(android.database.DataSetObserver)
-	 */
-	@Override
-	public void registerDataSetObserver(DataSetObserver observer) {
-
-	}
-
-	/* (non-Javadoc)
-	 * @see android.widget.Adapter#unregisterDataSetObserver(android.database.DataSetObserver)
-	 */
-	@Override
-	public void unregisterDataSetObserver(DataSetObserver observer) {
-
-	}
+	
 
 	/* (non-Javadoc)
 	 * @see android.widget.ListAdapter#areAllItemsEnabled()
@@ -238,6 +229,15 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 	public Filter getFilter() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void remove(int position) {
+		serverList.remove(position);
+	}
+
+	public void add(Server newServer) {
+		serverList.add(newServer);
+		
 	}
 
 }
