@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="fill_parent" 
     android:padding="10dp"
     android:textSize="16sp" >
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:id="@+id/serverTitle" android:text="serverTitle" style="?android:attr/textAppearanceLarge"></TextView>
     <TextView android:textAppearance="?android:attr/textAppearanceSmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/serverTitle" android:layout_alignLeft="@+id/serverTitle" android:text="serverIp" android:id="@+id/serverIp"></TextView>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/serverIp" android:layout_centerHorizontal="true" android:text="serverData" android:id="@+id/serverData"></TextView>
+    <TextView android:id="@+id/serverData" android:text="serverData" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/serverIp" android:layout_alignLeft="@+id/serverIp"></TextView>
+    <TextView android:textAppearance="?android:attr/textAppearanceSmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignBaseline="@+id/serverTitle" android:layout_alignBottom="@+id/serverTitle" android:layout_alignParentRight="true" android:id="@+id/playerCount" android:text="00/00"></TextView>
 </RelativeLayout>

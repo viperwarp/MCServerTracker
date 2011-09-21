@@ -39,6 +39,9 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 		
 		try {
 			serverList.add(new Server("My Server", InetAddress.getByName("119.224.43.89")));
+			serverList.add(new Server("Blake's Server", InetAddress.getByName("182.160.139.146")));
+			serverList.add(new Server("1.7 Server via URL", InetAddress.getByName("server.aussiegamerhub.com")));
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -91,10 +94,13 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 		} else {
 			serverView = (RelativeLayout) convertView;
 		}
-		String[] parts = null;
+		
+		String error = null;
+		
 		try {
+			String[] parts = null;
 			byte[] bytes = new byte[128];
-			Socket sock = new Socket("119.224.43.89", 25565);
+			Socket sock = new Socket(server.address, server.port);
 			OutputStream os = sock.getOutputStream();
 			InputStream is = sock.getInputStream();
 			
@@ -115,8 +121,16 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 
 			parts = message.split("¤");
 			
+			if (parts.length == 3) {
+				server.motd = parts[0];
+				server.playerCount = Integer.parseInt(parts[1]);
+				server.maxPlayers = Integer.parseInt(parts[2]);
+			} else {
+				error = parent.getResources().getString(R.string.server_version_error);
+			}
+			
 		} catch (IOException e) {
-			e.printStackTrace();
+			error = e.getLocalizedMessage();
 		}
 		
 		//set server name
@@ -124,12 +138,37 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 		serverTitle.setText(server.name);
 		//set server IP
 		TextView serverIp = (TextView) serverView.findViewById(R.id.serverIp);
-		serverIp.setText(server.address.toString() + ":25565");
-		
-		if (parts != null) {
-			TextView serverData = (TextView) serverView.findViewById(R.id.serverData);
-			serverData.setText(parts[0]);
+		String serverName = server.address.toString();
+		if (!serverName.startsWith("/")) {
+			int index = serverName.lastIndexOf('/');
+			String tempString;
+			tempString = serverName.substring(index+1);
+			serverName = serverName.substring(0, index);
+			serverName += " " + tempString;
+		} else {
+			serverName = serverName.replace("/", "");
 		}
+		serverIp.setText(serverName + ":" + server.port);
+		
+		if (error == null) {
+			TextView playerCount = (TextView) serverView.findViewById(R.id.playerCount);
+			playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
+			playerCount.setVisibility(View.VISIBLE);
+			
+			TextView serverData = (TextView) serverView.findViewById(R.id.serverData);
+			serverData.setText(server.motd);
+		} else {
+			/*
+			 * No Internet = "Network Unreachable"
+			 */
+			
+			TextView playerCount = (TextView) serverView.findViewById(R.id.playerCount);
+			playerCount.setVisibility(View.INVISIBLE);
+			
+			TextView serverData = (TextView) serverView.findViewById(R.id.serverData);
+			serverData.setText(error);
+		}
+		
 		//Server data
 		
 		
@@ -183,7 +222,7 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 	 */
 	@Override
 	public boolean areAllItemsEnabled() {
-		return false;
+		return true;
 	}
 
 	/* (non-Javadoc)
@@ -191,7 +230,7 @@ public class ServerListAdapter implements ListAdapter, Filterable {
 	 */
 	@Override
 	public boolean isEnabled(int position) {
-		return false;
+		return true;
 	}
 
 	@Override

@@ -12,12 +12,13 @@ import java.net.InetAddress;
 public class Server {
 	
 	public String name = "";
-	public InetAddress address;
+	public InetAddress address = null;
+	public int port = 25565;
 	
-	public int ping;
-	public int playerCount;
-	public int maxPlayers;
-	public String motd;
+	public int ping = 0;
+	public int playerCount = 0;
+	public int maxPlayers = 0;
+	public String motd = "";
 
 	/**
 	 * 
