@@ -135,7 +135,7 @@ public class MCServerTrackerActivity extends ListActivity {
 					serverList.add(server);
 					updateListView();
 				} else {
-					AlertDialog.Builder builder = new AlertDialog.Builder(MCServerTrackerActivity.this.getApplicationContext());
+					AlertDialog.Builder builder = new AlertDialog.Builder(MCServerTrackerActivity.this);
 					builder.setMessage("Failed to contact server\n" + result);
 					builder.setPositiveButton("Try Again", new OnClickListener() {
 						
