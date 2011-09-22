@@ -41,7 +41,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		this.serverList = serverList;
 		
 		try {
-			serverList.add(new Server("My Server", InetAddress.getByName("192.168.2.118")));
+//			serverList.add(new Server("My Server", InetAddress.getByName("192.168.2.118")));
 			serverList.add(new Server("Blake's Server", InetAddress.getByName("182.160.139.146")));
 			serverList.add(new Server("1.7 Server via URL", InetAddress.getByName("server.aussiegamerhub.com")));
 			serverList.add(new Server("Localhost - No Server", InetAddress.getByName("localhost")));

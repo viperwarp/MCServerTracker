@@ -11,6 +11,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.ClipboardManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MCServerTrackerActivity extends ListActivity {
 	
@@ -125,10 +127,14 @@ public class MCServerTrackerActivity extends ListActivity {
       final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
       switch (item.getItemId()) {
       case R.id.context_copy:
-        //TODO Copy server IP address to clipboard
+    	  Server server = serverList.getItem(info.position);
+    	  String address = server.address.toString() + ":" + server.port;
+    	  ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+    	  clipboard.setText(address);
+    	  Toast.makeText(this, address + " Copied", Toast.LENGTH_SHORT).show();
         return true;
       case R.id.context_delete:
-    	deleteServer((int)info.id);
+    	deleteServer(info.position);
         return true;
       default:
         return super.onContextItemSelected(item);
