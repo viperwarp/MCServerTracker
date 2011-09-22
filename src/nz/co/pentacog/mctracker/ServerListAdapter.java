@@ -116,6 +116,8 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 				byte[] stringData = new byte[stringLen * 2];
 				b.get(stringData);
 	
+				sock.close();
+				
 				String message = "";
 				try {
 					message = new String(stringData, "UTF-16BE");
@@ -159,7 +161,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		if (error == null) {
 			TextView playerCount = (TextView) serverView.findViewById(R.id.playerCount);
 			playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
-			playerCount.setVisibility(View.VISIBLE);
+			
 			
 			TextView serverData = (TextView) serverView.findViewById(R.id.serverData);
 			serverData.setText(server.motd);
@@ -170,8 +172,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 			 * No open ports = <address> - Connection refused
 			 */
 			
-			TextView playerCount = (TextView) serverView.findViewById(R.id.playerCount);
-			playerCount.setVisibility(View.INVISIBLE);
+			server.motd = error;
 			
 			TextView serverData = (TextView) serverView.findViewById(R.id.serverData);
 			serverData.setText(error);
