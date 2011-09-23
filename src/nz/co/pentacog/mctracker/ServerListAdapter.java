@@ -3,15 +3,11 @@
  */
 package nz.co.pentacog.mctracker;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
+
+import nz.co.pentacog.mctracker.GetServerDataTask.ServerDataResultHandler;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,7 +38,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		this.serverList = serverList;
 		
 		try {
-//			serverList.add(new Server("My Server", InetAddress.getByName("192.168.2.118")));
+			serverList.add(new Server("My Server", InetAddress.getByName("192.168.2.118")));
 			serverList.add(new Server("Blake's Server", InetAddress.getByName("182.160.139.146")));
 			serverList.add(new Server("1.7 Server via URL", InetAddress.getByName("server.aussiegamerhub.com")));
 			serverList.add(new Server("Localhost - No Server", InetAddress.getByName("localhost")));
@@ -91,61 +88,22 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		RelativeLayout serverView = null;
+		ServerViewHolder holder = null;
 		Server server = serverList.get(position);
 		
 		if (convertView == null) {
 			serverView = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+			holder = new ServerViewHolder(serverView);
+			serverView.setTag(holder);
 		} else {
 			serverView = (RelativeLayout) convertView;
+			holder = (ServerViewHolder) serverView.getTag();
 		}
 		
-		String error = null;
-		if (!server.queried) {
-			try {
-				String[] parts = null;
-				byte[] bytes = new byte[128];
-				Socket sock = new Socket(server.address, server.port);
-				OutputStream os = sock.getOutputStream();
-				InputStream is = sock.getInputStream();
-				
-				os.write(MCServerTrackerActivity.PACKET_REQUEST_CODE);
-				is.read(bytes);
-				ByteBuffer b = ByteBuffer.wrap(bytes);
-				b.get();
-				short stringLen = b.getShort();
-				byte[] stringData = new byte[stringLen * 2];
-				b.get(stringData);
-	
-				sock.close();
-				
-				String message = "";
-				try {
-					message = new String(stringData, "UTF-16BE");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-	 
-				parts = message.split("\u00A7");
-				
-				if (parts.length == 3) {
-					server.motd = parts[0];
-					server.playerCount = Integer.parseInt(parts[1]);
-					server.maxPlayers = Integer.parseInt(parts[2]);
-					
-				} else {
-					error = parent.getResources().getString(R.string.server_version_error);
-				}
-				
-			} catch (IOException e) {
-				error = e.getLocalizedMessage();
-			}
-			server.queried = true;
-		}
+		
 		//set server name
-		TextView serverTitle = (TextView) serverView.findViewById(R.id.serverTitle);
-		serverTitle.setText(server.name);
+		holder.serverTitle.setText(server.name);
 		//set server IP
-		TextView serverIp = (TextView) serverView.findViewById(R.id.serverIp);
 		String serverName = server.address.toString();
 		if (!serverName.startsWith("/")) {
 			int index = serverName.lastIndexOf('/');
@@ -156,32 +114,18 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		} else {
 			serverName = serverName.replace("/", "");
 		}
-		serverIp.setText(serverName + ":" + server.port);
+		holder.serverIp.setText(serverName + ":" + server.port);
 		
-		if (error == null) {
-			TextView playerCount = (TextView) serverView.findViewById(R.id.playerCount);
-			playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
-			
-			
-			TextView serverData = (TextView) serverView.findViewById(R.id.serverData);
-			serverData.setText(server.motd);
+		if (!server.queried) {
+			holder.loading.setVisibility(View.VISIBLE);
+			holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
+			holder.serverData.setText(R.string.loading);
+			new ServerViewUpdater(serverView, server);
 		} else {
-			/*
-			 * No Internet = "Network Unreachable"
-			 * open port but no server = "The operation timed out"
-			 * No open ports = <address> - Connection refused
-			 */
-			
-			server.motd = error;
-			
-			TextView serverData = (TextView) serverView.findViewById(R.id.serverData);
-			serverData.setText(error);
+			holder.loading.setVisibility(View.GONE);
+			holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
+			holder.serverData.setText(server.motd);
 		}
-		
-		//Server data
-		
-		
-		//if has ping/player data set that too
 		
 		return serverView;
 	}
@@ -242,5 +186,58 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		serverList.add(newServer);
 		
 	}
+	
+	public void refresh() {
+		for (Server server : serverList) {
+			server.queried = false;
+		}
+		this.notifyDataSetChanged();
+	}
+	
+	public class ServerViewHolder {
+		public TextView serverTitle;
+		public TextView serverIp;
+		public TextView playerCount;
+		public TextView serverData;
+		public ProgressBar loading;
+		
+		ServerViewHolder(View serverView) {
+			serverTitle = (TextView) serverView.findViewById(R.id.serverTitle);
+			serverIp = (TextView) serverView.findViewById(R.id.serverIp);
+			playerCount = (TextView) serverView.findViewById(R.id.playerCount);
+			serverData = (TextView) serverView.findViewById(R.id.serverData);
+			loading = (ProgressBar) serverView.findViewById(R.id.updating_server);
+		}
+	}
+
+	private class ServerViewUpdater implements ServerDataResultHandler {
+		private View view;
+
+		public ServerViewUpdater(View view, Server server) {
+			this.view = view;
+			new GetServerDataTask(server, this).execute();
+		}
+		
+		@Override
+		public void onServerDataResult(Server server, String result) {
+			ServerViewHolder holder = (ServerViewHolder) view.getTag();
+			
+			holder.loading.setVisibility(View.GONE);
+			holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
+			
+			/*
+			 * No Internet = "Network Unreachable"
+			 * open port but no server = "The operation timed out"
+			 * No open ports = <address> - Connection refused
+			 */
+			
+			holder.serverData.setText(server.motd);
+
+		}
+		
+		
+	}
+	
+	
 
 }

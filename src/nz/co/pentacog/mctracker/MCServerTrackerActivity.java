@@ -41,35 +41,6 @@ public class MCServerTrackerActivity extends ListActivity {
 		lv.setBackgroundResource(R.drawable.dirt_tile);
 		
 		registerForContextMenu(lv);
-//		lv.setLongClickable(true);
-//		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-//
-//			@Override
-//			public boolean onItemLongClick(AdapterView<?> parent, View view,
-//					final int position, long id) {
-//				AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-//				builder.setMessage(R.string.delete_caution);
-//				builder.setPositiveButton(R.string.yes, new OnClickListener() {
-//
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						serverList.remove(position);
-//						updateListView();
-//					}
-//				});
-//				builder.setNegativeButton(R.string.no, new OnClickListener() {
-//
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						dialog.dismiss();
-//					}
-//				});
-//
-//				builder.create().show();
-//
-//				return true;
-//			}
-//		});
 
     }
     
@@ -108,7 +79,7 @@ public class MCServerTrackerActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_refresh:
-            
+            serverList.refresh();
             return true;
         case R.id.menu_add_server:
             Intent addServer = new Intent(this, AddServerActivity.class);

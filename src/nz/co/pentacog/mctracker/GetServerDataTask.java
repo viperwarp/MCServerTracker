@@ -63,13 +63,15 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			byte[] stringData = new byte[stringLen * 2];
 			b.get(stringData);
 
+			sock.close();
+			
 			String message = "";
 			try {
 				message = new String(stringData, "UTF-16BE");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-
+ 
 			parts = message.split("\u00A7");
 			
 			if (parts.length == 3) {
@@ -78,14 +80,17 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 				server.maxPlayers = Integer.parseInt(parts[2]);
 				
 			} else {
-				error = "Invalid number of arguments";
+				error = "Server is running an incompatible version";
 			}
-			
 			
 		} catch (IOException e) {
 			error = e.getLocalizedMessage();
 		}
 		server.queried = true;
+		if (error != null) {
+			server.motd = error;
+		}
+		
 		return error;
 	}
 	
