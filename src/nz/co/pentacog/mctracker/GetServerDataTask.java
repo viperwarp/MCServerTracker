@@ -49,6 +49,8 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 		String error = null;
 		
 		try {
+			
+			
 			String[] parts = null;
 			byte[] bytes = new byte[128];
 			Socket sock = new Socket(server.address, server.port);

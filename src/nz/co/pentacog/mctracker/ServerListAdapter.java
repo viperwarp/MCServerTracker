@@ -3,8 +3,6 @@
  */
 package nz.co.pentacog.mctracker;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import nz.co.pentacog.mctracker.GetServerDataTask.ServerDataResultHandler;
@@ -37,16 +35,11 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	public ServerListAdapter(ArrayList<Server> serverList) {
 		this.serverList = serverList;
 		
-		try {
-			serverList.add(new Server("My Server", InetAddress.getByName("192.168.2.118")));
-			serverList.add(new Server("Blake's Server", InetAddress.getByName("182.160.139.146")));
-			serverList.add(new Server("1.7 Server via URL", InetAddress.getByName("server.aussiegamerhub.com")));
-			serverList.add(new Server("Localhost - No Server", InetAddress.getByName("localhost")));
-			
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		serverList.add(new Server("My Server", "192.168.2.118"));
+		serverList.add(new Server("Blake's Server", "182.160.139.146"));
+		serverList.add(new Server("1.7 Server via URL", "server.aussiegamerhub.com"));
+		serverList.add(new Server("Localhost - No Server", "localhost"));
+		
 	}
 
 	/* (non-Javadoc)
@@ -107,10 +100,12 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		String serverName = server.address.toString();
 		if (!serverName.startsWith("/")) {
 			int index = serverName.lastIndexOf('/');
-			String tempString;
-			tempString = serverName.substring(index+1);
-			serverName = serverName.substring(0, index);
-			serverName += " " + tempString;
+			if (index != -1) {
+				String tempString;
+				tempString = serverName.substring(index+1);
+				serverName = serverName.substring(0, index);
+				serverName += " " + tempString;
+			}
 		} else {
 			serverName = serverName.replace("/", "");
 		}

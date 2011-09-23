@@ -1,8 +1,5 @@
 package nz.co.pentacog.mctracker;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -151,17 +148,9 @@ public class MCServerTrackerActivity extends ListActivity {
 			String serverAddress = data.getStringExtra(Server.SERVER_ADDRESS);
 			String serverPort = data.getStringExtra(Server.SERVER_PORT);
 			
-			Server newServer = null;
-			try {
-				newServer = new Server(serverName, InetAddress.getByName(serverAddress));
-				newServer.port = Integer.parseInt(serverPort);
-			} catch (UnknownHostException e) {
-				//Invalid server address
-			}
-			
-			if (newServer != null) {
-				getServerData(newServer);
-			}
+			Server newServer = new Server(serverName, serverAddress);
+			newServer.port = Integer.parseInt(serverPort);
+			getServerData(newServer);
 		}
 		
 		

@@ -3,10 +3,8 @@
  */
 package nz.co.pentacog.mctracker;
 
-import java.net.InetAddress;
-
 /**
- * @author macpro
+ * @author Affian
  *
  */
 public class Server {
@@ -16,7 +14,7 @@ public class Server {
 	public static final String SERVER_PORT = "serverPort";
 	
 	public String name = "";
-	public InetAddress address = null;
+	public String address = null;
 	public int port = 25565;
 	
 	public int ping = 0;
@@ -28,7 +26,7 @@ public class Server {
 	/**
 	 * 
 	 */
-	public Server(String name, InetAddress address) {
+	public Server(String name, String address) {
 		this.name = name;
 		this.address = address;
 	}
