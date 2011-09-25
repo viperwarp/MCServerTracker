@@ -3,6 +3,9 @@
  */
 package nz.co.pentacog.mctracker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * @author Affian
  *
@@ -13,8 +16,8 @@ public class Server {
 	public static final String SERVER_ADDRESS = "serverAddress";
 	public static final String SERVER_PORT = "serverPort";
 	
-	public String name = "";
-	public String address = null;
+	public String name = "Undefined";
+	public String address = "Undefined";
 	public int port = 25565;
 	
 	public int ping = 0;
@@ -31,5 +34,30 @@ public class Server {
 		this.address = address;
 	}
 	
+	public Server(JSONObject obj) {
+		try {
+			this.name = obj.getString(SERVER_NAME);
+			this.address = obj.getString(SERVER_ADDRESS);
+			this.port = obj.getInt(SERVER_PORT);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public String toString() {
+		JSONObject obj = new JSONObject();
+		
+		try {
+			obj.put(SERVER_NAME, this.name);
+			obj.put(SERVER_ADDRESS, this.address);
+			obj.put(SERVER_PORT, this.port);
+		} catch (JSONException e) {
+			//I really get sick of mandatory exception handling
+			e.printStackTrace();
+		}
+		
+		return obj.toString();
+	}
 
 }

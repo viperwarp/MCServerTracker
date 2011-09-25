@@ -5,6 +5,8 @@ package nz.co.pentacog.mctracker;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+
 import nz.co.pentacog.mctracker.GetServerDataTask.ServerDataResultHandler;
 
 import android.view.LayoutInflater;
@@ -24,13 +26,17 @@ import android.widget.TextView;
 public class ServerListAdapter extends BaseAdapter implements Filterable {
 	
 	private ArrayList<Server> serverList = null;
-
+	
+	/**
+	 * 
+	 */
 	public ServerListAdapter() {
 		this(new ArrayList<Server>());
 	}
 	
 	/**
 	 * 
+	 * @param serverList
 	 */
 	public ServerListAdapter(ArrayList<Server> serverList) {
 		this.serverList = serverList;
@@ -40,6 +46,15 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		serverList.add(new Server("1.7 Server via URL", "server.aussiegamerhub.com"));
 		serverList.add(new Server("Localhost - No Server", "localhost"));
 		
+	}
+
+	/**
+	 * 
+	 * @param servers
+	 */
+	public ServerListAdapter(JSONArray servers) {
+		// TODO Auto-generated constructor stub
+		this(new ArrayList<Server>());
 	}
 
 	/* (non-Javadoc)

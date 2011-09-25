@@ -1,36 +1,45 @@
 package nz.co.pentacog.mctracker;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class MCServerTrackerActivity extends ListActivity {
 	
 	public static final int PACKET_REQUEST_CODE = 254;
+	private static final String SERVER_CACHE_FILE = "mcTrackerServerCache.json";
 	
-	private static ServerListAdapter serverList = new ServerListAdapter();
+	private static ServerListAdapter serverList = null;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
     	super.onCreate(savedInstanceState);
-		setListAdapter(serverList);
+		
 
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(false);
@@ -42,6 +51,45 @@ public class MCServerTrackerActivity extends ListActivity {
     }
     
     /**
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		File serverFile = new File(this.getFilesDir(), SERVER_CACHE_FILE);
+		try {
+		if (serverFile.exists()) {
+			BufferedReader br = new BufferedReader(new FileReader(serverFile));
+			JSONArray servers = null;
+			String jsonOutput = "";
+			String temp = null;
+			while ((temp = br.readLine()) != null) {
+				jsonOutput += temp;
+			}
+			
+			servers = new JSONArray(jsonOutput);
+			serverList = new ServerListAdapter(servers);
+		} else {
+			serverFile.createNewFile();
+		}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (serverList == null) {
+			serverList = new ServerListAdapter();
+		}
+		setListAdapter(serverList);
+	}
+
+
+
+	/**
      * Helper function to update the server list
      */
     public void updateListView() {
