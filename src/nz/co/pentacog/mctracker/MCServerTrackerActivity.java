@@ -1,9 +1,9 @@
 package nz.co.pentacog.mctracker;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +30,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 public class MCServerTrackerActivity extends ListActivity {
 	
 	public static final int PACKET_REQUEST_CODE = 254;
-	private static final String SERVER_CACHE_FILE = "mcTrackerServerCache.json";
+	public static final String SERVER_CACHE_FILE = "mcTrackerServerCache.json";
 	
 	private static ServerListAdapter serverList = null;
 	
@@ -57,22 +57,26 @@ public class MCServerTrackerActivity extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		File serverFile = new File(this.getFilesDir(), SERVER_CACHE_FILE);
+		
 		try {
-		if (serverFile.exists()) {
-			BufferedReader br = new BufferedReader(new FileReader(serverFile));
-			JSONArray servers = null;
-			String jsonOutput = "";
-			String temp = null;
-			while ((temp = br.readLine()) != null) {
-				jsonOutput += temp;
-			}
+			InputStream instream = openFileInput(SERVER_CACHE_FILE);
+			 
+		    // if file the available for reading
+		    if (instream != null && serverList == null) {
+		      // prepare the file for reading
+		      InputStreamReader inputreader = new InputStreamReader(instream);
+		      BufferedReader br = new BufferedReader(inputreader);
 			
-			servers = new JSONArray(jsonOutput);
-			serverList = new ServerListAdapter(servers);
-		} else {
-			serverFile.createNewFile();
-		}
+				JSONArray servers = null;
+				String jsonOutput = "";
+				String temp = null;
+				while ((temp = br.readLine()) != null) {
+					jsonOutput += temp;
+				}
+				
+				servers = new JSONArray(jsonOutput);
+				serverList = new ServerListAdapter(servers);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,7 +91,7 @@ public class MCServerTrackerActivity extends ListActivity {
 		setListAdapter(serverList);
 	}
 
-
+	
 
 	/**
      * Helper function to update the server list
@@ -166,9 +170,11 @@ public class MCServerTrackerActivity extends ListActivity {
 		builder.setMessage(R.string.delete_caution);
 		builder.setPositiveButton(R.string.yes, new OnClickListener() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				serverList.remove(position);
+				new SaveServerListTask(getApplicationContext()).execute(serverList.getServerList());
 				updateListView();
 			}
 		});
@@ -213,11 +219,13 @@ public class MCServerTrackerActivity extends ListActivity {
 		final ProgressDialog dialog = ProgressDialog.show(this, "", "Requesting Server Info", true);
 		GetServerDataTask task = new GetServerDataTask(server, new GetServerDataTask.ServerDataResultHandler() {
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onServerDataResult(final Server server, String result) {
 				dialog.dismiss();
 				if (result == null) {
 					serverList.add(server);
+					new SaveServerListTask(getApplicationContext()).execute(serverList.getServerList());
 					updateListView();
 				} else {
 					AlertDialog.Builder builder = new AlertDialog.Builder(MCServerTrackerActivity.this);

@@ -20,6 +20,7 @@ public class Server {
 	public String address = "Undefined";
 	public int port = 25565;
 	
+	public int id = -1;
 	public int ping = 0;
 	public int playerCount = 0;
 	public int maxPlayers = 0;
@@ -34,15 +35,10 @@ public class Server {
 		this.address = address;
 	}
 	
-	public Server(JSONObject obj) {
-		try {
+	public Server(JSONObject obj) throws JSONException {
 			this.name = obj.getString(SERVER_NAME);
 			this.address = obj.getString(SERVER_ADDRESS);
 			this.port = obj.getInt(SERVER_PORT);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
 	}
 	
 	public String toString() {
@@ -59,5 +55,21 @@ public class Server {
 		
 		return obj.toString();
 	}
+	
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		
+		try {
+			obj.put(SERVER_NAME, this.name);
+			obj.put(SERVER_ADDRESS, this.address);
+			obj.put(SERVER_PORT, this.port);
+		} catch (JSONException e) {
+			//I really get sick of mandatory exception handling
+			e.printStackTrace();
+		}
+		
+		return obj;
+	}
+
 
 }

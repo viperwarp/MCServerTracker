@@ -6,6 +6,8 @@ package nz.co.pentacog.mctracker;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import nz.co.pentacog.mctracker.GetServerDataTask.ServerDataResultHandler;
 
@@ -41,11 +43,6 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	public ServerListAdapter(ArrayList<Server> serverList) {
 		this.serverList = serverList;
 		
-		serverList.add(new Server("My Server", "192.168.2.118"));
-		serverList.add(new Server("Blake's Server", "182.160.139.146"));
-		serverList.add(new Server("1.7 Server via URL", "server.aussiegamerhub.com"));
-		serverList.add(new Server("Localhost - No Server", "localhost"));
-		
 	}
 
 	/**
@@ -53,8 +50,21 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	 * @param servers
 	 */
 	public ServerListAdapter(JSONArray servers) {
-		// TODO Auto-generated constructor stub
-		this(new ArrayList<Server>());
+		this.serverList = new ArrayList<Server>();
+		
+		for (int i = 0; i < servers.length(); i++) {
+			try {
+				JSONObject obj = servers.getJSONObject(i);
+				
+				Server server = new Server(obj);
+				serverList.add(server);
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 	}
 
 	/* (non-Javadoc)
@@ -78,7 +88,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	 */
 	@Override
 	public long getItemId(int position) {
-		return position;
+		return serverList.get(position).id;
 	}
 
 	/* (non-Javadoc)
@@ -98,10 +108,10 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		RelativeLayout serverView = null;
 		ServerViewHolder holder = null;
 		Server server = serverList.get(position);
-		
+		server.id = position;
 		if (convertView == null) {
 			serverView = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-			holder = new ServerViewHolder(serverView);
+			holder = new ServerViewHolder((int) getItemId(position), serverView);
 			serverView.setTag(holder);
 		} else {
 			serverView = (RelativeLayout) convertView;
@@ -205,13 +215,15 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	}
 	
 	public class ServerViewHolder {
+		public int id;
 		public TextView serverTitle;
 		public TextView serverIp;
 		public TextView playerCount;
 		public TextView serverData;
 		public ProgressBar loading;
 		
-		ServerViewHolder(View serverView) {
+		ServerViewHolder(int id, View serverView) {
+			this.id = id;
 			serverTitle = (TextView) serverView.findViewById(R.id.serverTitle);
 			serverIp = (TextView) serverView.findViewById(R.id.serverIp);
 			playerCount = (TextView) serverView.findViewById(R.id.playerCount);
@@ -231,21 +243,28 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		@Override
 		public void onServerDataResult(Server server, String result) {
 			ServerViewHolder holder = (ServerViewHolder) view.getTag();
-			
-			holder.loading.setVisibility(View.GONE);
-			holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
-			
-			/*
-			 * No Internet = "Network Unreachable"
-			 * open port but no server = "The operation timed out"
-			 * No open ports = <address> - Connection refused
-			 */
-			
-			holder.serverData.setText(server.motd);
+			if (holder.id == server.id) {
+				holder.loading.setVisibility(View.GONE);
+				holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
+				
+				/*
+				 * No Internet = "Network Unreachable"
+				 * open port but no server = "The operation timed out"
+				 * No open ports = <address> - Connection refused
+				 */
+				
+				holder.serverData.setText(server.motd);
+			} else {
+				server.queried = false;
+			}
 
 		}
 		
 		
+	}
+	
+	public final ArrayList<Server> getServerList() {
+		return this.serverList;
 	}
 	
 	
