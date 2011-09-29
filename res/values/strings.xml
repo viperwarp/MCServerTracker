@@ -13,4 +13,6 @@
     <string name="refresh">Refresh</string>
     <string name="delete">Delete</string>
     <string name="loading">Loading...</string>
+    <string name="edit">Edit</string>
+    <string name="edit_server">Edit Server</string>
 </resources>

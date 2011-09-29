@@ -152,10 +152,13 @@ public class MCServerTrackerActivity extends ListActivity {
     	  ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
     	  clipboard.setText(address);
     	  Toast.makeText(this, address + " Copied", Toast.LENGTH_SHORT).show();
-        return true;
+          return true;
       case R.id.context_delete:
-    	deleteServer(info.position);
-        return true;
+    	  deleteServer(info.position);
+          return true;
+      case R.id.context_edit:
+    	  editServer(info.position);
+    	  return true;
       default:
         return super.onContextItemSelected(item);
       }
@@ -189,6 +192,16 @@ public class MCServerTrackerActivity extends ListActivity {
 		builder.create().show();
 
     }
+    
+    private void editServer(int position) {
+    	Server server = serverList.getItem(position);
+    	Intent addServer = new Intent(this, AddServerActivity.class);
+    	addServer.putExtra(Server.SERVER_NAME, server.name);
+    	addServer.putExtra(Server.SERVER_ADDRESS, server.address);
+    	addServer.putExtra(Server.SERVER_PORT, "" + server.port);
+    	
+        startActivityForResult(addServer, AddServerActivity.ADD_SERVER_ACTIVITY_ID);
+    }
 
 	/**
 	 * Used to collect new server data from the AddServer Activity
@@ -196,6 +209,8 @@ public class MCServerTrackerActivity extends ListActivity {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//If was editmode then update existing server
+		
 		
 		if (requestCode == AddServerActivity.ADD_SERVER_ACTIVITY_ID && resultCode == RESULT_OK) {
 			String serverName = data.getStringExtra(Server.SERVER_NAME);

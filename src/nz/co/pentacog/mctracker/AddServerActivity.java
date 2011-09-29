@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -17,17 +18,28 @@ public class AddServerActivity extends Activity {
 
 	public static final int ADD_SERVER_ACTIVITY_ID = 10;
 	
-	/**
-	 * 
-	 */
-	public AddServerActivity() {
-		//Empty Constructor
-	}
+	private boolean editMode = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.add_server_layout);
+		
+		Bundle bundle = this.getIntent().getExtras();
+		if (bundle != null) {
+			TextView serverName = (TextView) this.findViewById(R.id.serverNameEdit);
+			TextView serverAddress = (TextView) this.findViewById(R.id.serverAddressEdit);
+			TextView serverPort = (TextView) this.findViewById(R.id.serverPortEdit);
+			
+			serverName.setText(bundle.getString(Server.SERVER_NAME));
+			serverAddress.setText(bundle.getString(Server.SERVER_ADDRESS));
+			serverPort.setText(bundle.getString(Server.SERVER_PORT));
+			
+			editMode = true;
+			
+			Button submitButton = (Button)findViewById(R.id.submitButton);
+			submitButton.setText(R.string.edit_server);
+		}
 	}
 	
 	public void submit(View view) {
