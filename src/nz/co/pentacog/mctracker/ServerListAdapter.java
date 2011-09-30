@@ -116,6 +116,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		} else {
 			serverView = (RelativeLayout) convertView;
 			holder = (ServerViewHolder) serverView.getTag();
+			holder.id = (int) getItemId(position);
 		}
 		
 		
@@ -215,6 +216,9 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	}
 	
 	public class ServerViewHolder {
+		
+		
+		
 		public int id;
 		public TextView serverTitle;
 		public TextView serverIp;

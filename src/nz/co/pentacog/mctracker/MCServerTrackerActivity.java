@@ -57,36 +57,45 @@ public class MCServerTrackerActivity extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		
+		if (serverList == null) {
 		
-		try {
-			InputStream instream = openFileInput(SERVER_CACHE_FILE);
-			 
-		    // if file the available for reading
-		    if (instream != null && serverList == null) {
-		      // prepare the file for reading
-		      InputStreamReader inputreader = new InputStreamReader(instream);
-		      BufferedReader br = new BufferedReader(inputreader);
-			
-				JSONArray servers = null;
-				String jsonOutput = "";
-				String temp = null;
-				while ((temp = br.readLine()) != null) {
-					jsonOutput += temp;
-				}
+			try {
+				InputStream instream = openFileInput(SERVER_CACHE_FILE);
+				 
+			    // if file the available for reading
+			    if (instream != null) {
+			        // prepare the file for reading
+			        InputStreamReader inputreader = new InputStreamReader(instream);
+			        BufferedReader br = new BufferedReader(inputreader);
 				
-				servers = new JSONArray(jsonOutput);
-				serverList = new ServerListAdapter(servers);
+					JSONArray servers = null;
+					String jsonOutput = "";
+					String temp = null;
+					while ((temp = br.readLine()) != null) {
+						jsonOutput += temp;
+					}
+					
+					servers = new JSONArray(jsonOutput);
+					serverList = new ServerListAdapter(servers);
+					setListAdapter(serverList);
+					br.close();
+					instream.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		} else {
+			serverList.refresh();
 		}
 		
 		if (serverList == null) {
 			serverList = new ServerListAdapter();
+			
 		}
 		setListAdapter(serverList);
 	}
@@ -196,6 +205,7 @@ public class MCServerTrackerActivity extends ListActivity {
     private void editServer(int position) {
     	Server server = serverList.getItem(position);
     	Intent addServer = new Intent(this, AddServerActivity.class);
+    	addServer.putExtra(Server.SERVER_ID, server.id);
     	addServer.putExtra(Server.SERVER_NAME, server.name);
     	addServer.putExtra(Server.SERVER_ADDRESS, server.address);
     	addServer.putExtra(Server.SERVER_PORT, "" + server.port);
@@ -216,10 +226,20 @@ public class MCServerTrackerActivity extends ListActivity {
 			String serverName = data.getStringExtra(Server.SERVER_NAME);
 			String serverAddress = data.getStringExtra(Server.SERVER_ADDRESS);
 			String serverPort = data.getStringExtra(Server.SERVER_PORT);
+			int serverId = data.getIntExtra(Server.SERVER_ID, -1);
 			
-			Server newServer = new Server(serverName, serverAddress);
-			newServer.port = Integer.parseInt(serverPort);
-			getServerData(newServer);
+			if (serverId == -1) {
+				Server newServer = new Server(serverName, serverAddress);
+				newServer.port = Integer.parseInt(serverPort);
+				getServerData(newServer);
+			} else {
+				Server server = serverList.getItem(serverId);
+				server.name = serverName;
+				server.address = serverAddress;
+				server.port = Integer.parseInt(serverPort);
+				server.queried = false;
+				serverList.notifyDataSetChanged();
+			}
 		}
 		
 		
@@ -259,11 +279,27 @@ public class MCServerTrackerActivity extends ListActivity {
 							dialog.dismiss();
 						}
 					});
+					builder.setNeutralButton("Back", new OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							Intent addServer = new Intent(MCServerTrackerActivity.this, AddServerActivity.class);
+					    	addServer.putExtra(Server.SERVER_ID, server.id);
+					    	addServer.putExtra(Server.SERVER_NAME, server.name);
+					    	addServer.putExtra(Server.SERVER_ADDRESS, server.address);
+					    	addServer.putExtra(Server.SERVER_PORT, "" + server.port);
+					    	
+					        startActivityForResult(addServer, AddServerActivity.ADD_SERVER_ACTIVITY_ID);
+						}
+					});
 					
 					builder.create().show();
 				}
 			}
 		});
+		
+		
 		
 		task.execute();
 	}

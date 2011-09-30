@@ -15,6 +15,7 @@ public class Server {
 	public static final String SERVER_NAME = "serverName";
 	public static final String SERVER_ADDRESS = "serverAddress";
 	public static final String SERVER_PORT = "serverPort";
+	public static final String SERVER_ID = "serverId";
 	
 	public String name = "Undefined";
 	public String address = "Undefined";

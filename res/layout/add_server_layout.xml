@@ -5,17 +5,17 @@
 	<TextView android:id="@+id/textView1" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="@string/server_name" android:paddingTop="5dp"></TextView>
 	<EditText android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:hint="Server Name" android:id="@+id/serverNameEdit">
+		android:layout_height="wrap_content" android:hint="Server Name" android:id="@+id/serverNameEdit" android:inputType="textCapSentences" android:lines="1">
 		<requestFocus></requestFocus>
 	</EditText>
 	<TextView android:id="@+id/textView2" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="@string/server_address" android:paddingTop="5dp"></TextView>
 	<EditText android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:hint="Server IP/URL" android:id="@+id/serverAddressEdit"></EditText>
+		android:layout_height="wrap_content" android:hint="Server IP/URL" android:id="@+id/serverAddressEdit" android:maxLines="1" android:inputType="textUri"></EditText>
 	<TextView android:id="@+id/textView3" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="@string/server_port" android:paddingTop="5dp"></TextView>
 	<EditText android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:inputType="number" android:text="25565" android:id="@+id/serverPortEdit"></EditText>
+		android:layout_height="wrap_content" android:inputType="number" android:text="25565" android:id="@+id/serverPortEdit" android:lines="1"></EditText>
 	<Button android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_gravity="center"
 		android:id="@+id/submitButton" android:text="@string/add_server"

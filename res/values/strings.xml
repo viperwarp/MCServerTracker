@@ -9,10 +9,10 @@
     <string name="server_address">Server Address</string>
     <string name="server_port">Server Port</string>
     <string name="add_server">Add Server</string>
-    <string name="context_copy">Copy Server IP</string>
+    <string name="context_copy">Copy Server Address</string>
     <string name="refresh">Refresh</string>
     <string name="delete">Delete</string>
     <string name="loading">Loading...</string>
     <string name="edit">Edit</string>
-    <string name="edit_server">Edit Server</string>
+    <string name="edit_server">Save Server</string>
 </resources>

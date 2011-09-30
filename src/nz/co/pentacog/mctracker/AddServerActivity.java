@@ -18,7 +18,7 @@ public class AddServerActivity extends Activity {
 
 	public static final int ADD_SERVER_ACTIVITY_ID = 10;
 	
-	private boolean editMode = false;
+	private int serverId = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class AddServerActivity extends Activity {
 			serverAddress.setText(bundle.getString(Server.SERVER_ADDRESS));
 			serverPort.setText(bundle.getString(Server.SERVER_PORT));
 			
-			editMode = true;
+			serverId = bundle.getInt(Server.SERVER_ID, -1);
 			
 			Button submitButton = (Button)findViewById(R.id.submitButton);
 			submitButton.setText(R.string.edit_server);
@@ -48,6 +48,7 @@ public class AddServerActivity extends Activity {
 		TextView serverPort = (TextView) this.findViewById(R.id.serverPortEdit);
 		
 		Intent resultIntent = new Intent();
+		resultIntent.putExtra(Server.SERVER_ID, serverId);
 		resultIntent.putExtra(Server.SERVER_NAME, serverName.getText().toString());
 		resultIntent.putExtra(Server.SERVER_ADDRESS, serverAddress.getText().toString());
 		resultIntent.putExtra(Server.SERVER_PORT, serverPort.getText().toString());
