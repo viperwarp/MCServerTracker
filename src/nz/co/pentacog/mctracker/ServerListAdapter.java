@@ -146,6 +146,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 			holder.loading.setVisibility(View.GONE);
 			holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
 			holder.serverData.setText(server.motd);
+			holder.ping.setText("" + server.ping + "ms");
 		}
 		
 		return serverView;
@@ -224,6 +225,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		public TextView serverIp;
 		public TextView playerCount;
 		public TextView serverData;
+		public TextView ping;
 		public ProgressBar loading;
 		
 		ServerViewHolder(int id, View serverView) {
@@ -233,6 +235,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 			playerCount = (TextView) serverView.findViewById(R.id.playerCount);
 			serverData = (TextView) serverView.findViewById(R.id.serverData);
 			loading = (ProgressBar) serverView.findViewById(R.id.updating_server);
+			ping = (TextView) serverView.findViewById(R.id.ping);
 		}
 	}
 
@@ -250,7 +253,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 			if (holder.id == server.id) {
 				holder.loading.setVisibility(View.GONE);
 				holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
-				
+				holder.ping.setText("" + server.ping + "ms");
 				/*
 				 * No Internet = "Network Unreachable"
 				 * open port but no server = "The operation timed out"

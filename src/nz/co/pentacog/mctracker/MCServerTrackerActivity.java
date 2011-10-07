@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -31,8 +32,13 @@ public class MCServerTrackerActivity extends ListActivity {
 	
 	public static final int PACKET_REQUEST_CODE = 254;
 	public static final String SERVER_CACHE_FILE = "mcTrackerServerCache.json";
+	private static final int JSON_ERROR_DIALOG = 10;
+	private static final int IO_ERROR_DIALOG = 20;
+	private static final int NO_SERVER_DIALOG = 30;
+	private static final int SERVER_REFRESH_RATE = 30000;
 	
 	private static ServerListAdapter serverList = null;
+	private static long lastRefresh = 0;
 	
     /** Called when the activity is first created. */
     @Override
@@ -78,29 +84,77 @@ public class MCServerTrackerActivity extends ListActivity {
 					servers = new JSONArray(jsonOutput);
 					serverList = new ServerListAdapter(servers);
 					setListAdapter(serverList);
+					lastRefresh = System.currentTimeMillis();
 					br.close();
 					instream.close();
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				/*
+				 * Breaks here on first load with file not found
+				 * New one will be created on next save
+				 */
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				/*
+				 * If the JSON somehow becomes corrupt then this will fire
+				 * telling the user why their servers have vanished
+				 */
+				showDialog(JSON_ERROR_DIALOG);
 			}
 		
-		} else {
+		} else if(System.currentTimeMillis() - lastRefresh > SERVER_REFRESH_RATE) {
 			serverList.refresh();
+			lastRefresh = System.currentTimeMillis();
 		}
 		
 		if (serverList == null) {
 			serverList = new ServerListAdapter();
-			
+			showDialog(NO_SERVER_DIALOG);
+			lastRefresh = System.currentTimeMillis();
 		}
 		setListAdapter(serverList);
 	}
 
-	
+	/**
+	 * @see android.app.Activity#onCreateDialog(int)
+	 */
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		switch (id) {
+		case JSON_ERROR_DIALOG:
+			builder.setTitle(R.string.cache_corrupt);
+			builder.setMessage(R.string.cache_corrupt_message);
+			builder.setNeutralButton(R.string.ok, new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			return builder.create();
+		case NO_SERVER_DIALOG:
+			builder.setTitle(R.string.no_servers);
+			builder.setMessage(R.string.no_server_message);
+			builder.setPositiveButton(R.string.yes, new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Intent addServer = new Intent(MCServerTrackerActivity.this, AddServerActivity.class);
+			        startActivityForResult(addServer, AddServerActivity.ADD_SERVER_ACTIVITY_ID);
+				}
+			});
+			builder.setNegativeButton(R.string.no, new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			return builder.create();
+		case IO_ERROR_DIALOG:
+			break;
+		}
+		return super.onCreateDialog(id);
+	}
 
 	/**
      * Helper function to update the server list
@@ -138,6 +192,7 @@ public class MCServerTrackerActivity extends ListActivity {
         switch (item.getItemId()) {
         case R.id.menu_refresh:
             serverList.refresh();
+            lastRefresh = System.currentTimeMillis();
             return true;
         case R.id.menu_add_server:
             Intent addServer = new Intent(this, AddServerActivity.class);
@@ -219,8 +274,6 @@ public class MCServerTrackerActivity extends ListActivity {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//If was editmode then update existing server
-		
 		
 		if (requestCode == AddServerActivity.ADD_SERVER_ACTIVITY_ID && resultCode == RESULT_OK) {
 			String serverName = data.getStringExtra(Server.SERVER_NAME);

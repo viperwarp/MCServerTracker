@@ -49,7 +49,7 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 		String error = null;
 		
 		try {
-			
+			long requestTime = 0;
 			
 			String[] parts = null;
 			byte[] bytes = new byte[128];
@@ -57,8 +57,10 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			OutputStream os = sock.getOutputStream();
 			InputStream is = sock.getInputStream();
 			
+			requestTime = System.currentTimeMillis();
 			os.write(MCServerTrackerActivity.PACKET_REQUEST_CODE);
 			is.read(bytes);
+			requestTime = System.currentTimeMillis() - requestTime;
 			ByteBuffer b = ByteBuffer.wrap(bytes);
 			b.get();
 			short stringLen = b.getShort();
@@ -80,7 +82,7 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 				server.motd = parts[0];
 				server.playerCount = Integer.parseInt(parts[1]);
 				server.maxPlayers = Integer.parseInt(parts[2]);
-				
+				server.ping = (int)requestTime;
 			} else {
 				error = "Server is running an incompatible version";
 			}

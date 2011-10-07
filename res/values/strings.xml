@@ -15,4 +15,9 @@
     <string name="loading">Loading...</string>
     <string name="edit">Edit</string>
     <string name="edit_server">Save Server</string>
+    <string name="no_servers">No Servers Found</string>
+    <string name="no_server_message">No Servers were found. Would you like to add one now?</string>
+    <string name="cache_corrupt">Corrupt Server Cache</string>
+    <string name="cache_corrupt_message">Your server cache appears to be corrupt, a new one will be created</string>
+    <string name="ok">Ok</string>
 </resources>
