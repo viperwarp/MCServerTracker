@@ -4,7 +4,6 @@
 package nz.co.pentacog.mctracker;
 
 import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +26,12 @@ import android.widget.TextView;
  */
 public class ServerListAdapter extends BaseAdapter implements Filterable {
 	
+	private ArrayList<Server> mOriginalValues = null;
 	private ArrayList<Server> serverList = null;
+	
+	private final Object mLock = new Object();
+
+	private ArrayFilter mFilter = null;
 	
 	/**
 	 * 
@@ -42,7 +46,6 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	 */
 	public ServerListAdapter(ArrayList<Server> serverList) {
 		this.serverList = serverList;
-		
 	}
 
 	/**
@@ -196,8 +199,10 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 
 	@Override
 	public Filter getFilter() {
-		// TODO Auto-generated method stub
-		return null;
+		if (mFilter  == null) {
+            mFilter = new ArrayFilter();
+        }
+        return mFilter;
 	}
 
 	public void remove(int position) {
@@ -274,6 +279,71 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		return this.serverList;
 	}
 	
-	
+	private class ArrayFilter extends Filter {
+        
+
+		@Override
+        protected FilterResults performFiltering(CharSequence prefix) {
+            FilterResults results = new FilterResults();
+
+            if (mOriginalValues == null) {
+                synchronized (mLock) {
+                    mOriginalValues = new ArrayList<Server>(serverList);
+                }
+            }
+
+            if (prefix == null || prefix.length() == 0) {
+                synchronized (mLock) {
+                    ArrayList<Server> list = new ArrayList<Server>(mOriginalValues);
+                    results.values = list;
+                    results.count = list.size();
+                }
+            } else {
+                String prefixString = prefix.toString().toLowerCase();
+
+                final ArrayList<Server> values = mOriginalValues;
+                final int count = values.size();
+
+                final ArrayList<Server> newValues = new ArrayList<Server>(count);
+
+                for (int i = 0; i < count; i++) {
+                    final Server value = values.get(i);
+                    final String valueText = value.name.toLowerCase();
+
+                    // First match against the whole, non-splitted value
+                    if (valueText.startsWith(prefixString)) {
+                        newValues.add(value);
+                    } else {
+                        final String[] words = valueText.split(" ");
+                        final int wordCount = words.length;
+
+                        for (int k = 0; k < wordCount; k++) {
+                            if (words[k].startsWith(prefixString)) {
+                                newValues.add(value);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                results.values = newValues;
+                results.count = newValues.size();
+            }
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+		@Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            //noinspection unchecked
+        	serverList = (ArrayList<Server>) results.values;
+            if (results.count > 0) {
+                notifyDataSetChanged();
+            } else {
+                notifyDataSetInvalidated();
+            }
+        }
+    }
 
 }

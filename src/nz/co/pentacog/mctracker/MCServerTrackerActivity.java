@@ -48,7 +48,7 @@ public class MCServerTrackerActivity extends ListActivity {
 		
 
 		ListView lv = getListView();
-		lv.setTextFilterEnabled(false);
+		lv.setTextFilterEnabled(true);
 		lv.setCacheColorHint(Color.TRANSPARENT);
 		lv.setBackgroundResource(R.drawable.dirt_tile);
 		
