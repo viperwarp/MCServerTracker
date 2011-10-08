@@ -20,4 +20,5 @@
     <string name="cache_corrupt">Corrupt Server Cache</string>
     <string name="cache_corrupt_message">Your server cache appears to be corrupt, a new one will be created</string>
     <string name="ok">Ok</string>
+    <string name="search">Search</string>
 </resources>

@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
@@ -19,11 +20,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -115,6 +118,18 @@ public class MCServerTrackerActivity extends ListActivity {
 	}
 
 	/**
+	 * @see android.app.Activity#onPause()
+	 */
+	@Override
+	protected void onPause() {
+		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		if (mgr.isActive(getListView())) {
+			mgr.hideSoftInputFromWindow(getListView().getWindowToken(), 0);
+		}
+		super.onPause();
+	}
+
+	/**
 	 * @see android.app.Activity#onCreateDialog(int)
 	 */
 	@Override
@@ -198,6 +213,10 @@ public class MCServerTrackerActivity extends ListActivity {
             Intent addServer = new Intent(this, AddServerActivity.class);
             startActivityForResult(addServer, AddServerActivity.ADD_SERVER_ACTIVITY_ID);
             return true;
+        case R.id.menu_search:
+        	InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        	mgr.showSoftInput(getListView(), InputMethodManager.SHOW_FORCED);
+        	return true;
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -229,6 +248,20 @@ public class MCServerTrackerActivity extends ListActivity {
     }
     
     /**
+	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+				
+		if (keyCode == KeyEvent.KEYCODE_SEARCH) {
+			InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        	mgr.showSoftInput(getListView(), InputMethodManager.SHOW_FORCED);
+        	return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	/**
      * Presents a dialog confirming server deletion
      * @param position index of server to delete
      */
