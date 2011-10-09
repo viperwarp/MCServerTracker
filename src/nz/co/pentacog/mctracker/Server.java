@@ -16,6 +16,7 @@ public class Server {
 	public static final String SERVER_ADDRESS = "serverAddress";
 	public static final String SERVER_PORT = "serverPort";
 	public static final String SERVER_ID = "serverId";
+	public static final String SERVER_FAVORITE = "serverFavorite";
 	
 	public String name = "Undefined";
 	public String address = "Undefined";
@@ -27,6 +28,7 @@ public class Server {
 	public int maxPlayers = 0;
 	public String motd = "";
 	public boolean queried = false;
+	public boolean favorite = false;
 
 	/**
 	 * 
@@ -40,21 +42,17 @@ public class Server {
 			this.name = obj.getString(SERVER_NAME);
 			this.address = obj.getString(SERVER_ADDRESS);
 			this.port = obj.getInt(SERVER_PORT);
+			
+			//exception handling optional JSON values
+			try {
+				this.favorite = obj.getBoolean(SERVER_FAVORITE);
+			} catch (JSONException e) {
+				//Continue silently
+			}
 	}
 	
 	public String toString() {
-		JSONObject obj = new JSONObject();
-		
-		try {
-			obj.put(SERVER_NAME, this.name);
-			obj.put(SERVER_ADDRESS, this.address);
-			obj.put(SERVER_PORT, this.port);
-		} catch (JSONException e) {
-			//I really get sick of mandatory exception handling
-			e.printStackTrace();
-		}
-		
-		return obj.toString();
+		return this.toJSON().toString();
 	}
 	
 	public JSONObject toJSON() {
@@ -64,6 +62,7 @@ public class Server {
 			obj.put(SERVER_NAME, this.name);
 			obj.put(SERVER_ADDRESS, this.address);
 			obj.put(SERVER_PORT, this.port);
+			obj.put(SERVER_FAVORITE, this.favorite);
 		} catch (JSONException e) {
 			//I really get sick of mandatory exception handling
 			e.printStackTrace();

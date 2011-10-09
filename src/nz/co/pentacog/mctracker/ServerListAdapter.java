@@ -4,6 +4,9 @@
 package nz.co.pentacog.mctracker;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +49,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 	 */
 	public ServerListAdapter(ArrayList<Server> serverList) {
 		this.serverList = serverList;
+		sort();
 	}
 
 	/**
@@ -68,6 +72,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 			}
 			
 		}
+		sort();
 	}
 
 	/* (non-Javadoc)
@@ -211,6 +216,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 
 	public void add(Server newServer) {
 		serverList.add(newServer);
+		sort();
 		
 	}
 	
@@ -220,6 +226,24 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		}
 		this.notifyDataSetChanged();
 	}
+	
+	public void sort() {
+        Collections.sort(serverList, new Comparator<Server>() {
+
+			@Override
+			public int compare(Server object1, Server object2) {
+				
+				if (object1.favorite && !object2.favorite) {
+					return 1;
+				} else if (object2.favorite && !object1.favorite) {
+					return -1;
+				}
+				
+				return object1.name.compareTo(object2.name);
+			}
+		});
+        notifyDataSetChanged();
+    }
 	
 	public class ServerViewHolder {
 		

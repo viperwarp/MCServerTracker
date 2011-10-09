@@ -324,7 +324,7 @@ public class MCServerTrackerActivity extends ListActivity {
 				server.address = serverAddress;
 				server.port = Integer.parseInt(serverPort);
 				server.queried = false;
-				serverList.notifyDataSetChanged();
+				serverList.sort();
 			}
 		}
 		
