@@ -307,19 +307,30 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
                 final ArrayList<Server> newValues = new ArrayList<Server>(count);
 
                 for (int i = 0; i < count; i++) {
-                    final Server value = values.get(i);
-                    final String valueText = value.name.toLowerCase();
-
+                    final Server server = values.get(i);
+                    final String valueText = server.name.toLowerCase();
+                    final String valueIp = server.address.toLowerCase();
                     // First match against the whole, non-splitted value
-                    if (valueText.startsWith(prefixString)) {
-                        newValues.add(value);
+                    if (valueText.startsWith(prefixString) || valueIp.startsWith(prefixString)) {
+                        newValues.add(server);
                     } else {
                         final String[] words = valueText.split(" ");
                         final int wordCount = words.length;
+                        
 
                         for (int k = 0; k < wordCount; k++) {
                             if (words[k].startsWith(prefixString)) {
-                                newValues.add(value);
+                                newValues.add(server);
+                                break;
+                            }
+                        }
+                        
+                        final String[] subnets = valueIp.split("\\.");
+                        final int netCount = subnets.length;
+
+                        for (int j = 0; j < netCount; j++) {
+                            if (subnets[j].startsWith(prefixString)) {
+                                newValues.add(server);
                                 break;
                             }
                         }
