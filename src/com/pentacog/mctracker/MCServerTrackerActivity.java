@@ -1,4 +1,4 @@
-package nz.co.pentacog.mctracker;
+package com.pentacog.mctracker;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class MCServerTrackerActivity extends ListActivity {
 	private static final int JSON_ERROR_DIALOG = 10;
 	private static final int IO_ERROR_DIALOG = 20;
 	private static final int NO_SERVER_DIALOG = 30;
-	private static final int SERVER_REFRESH_RATE = 30000;
+	private static final int SERVER_REFRESH_RATE = 300000;
 	
 	private static ServerListAdapter serverList = null;
 	private static long lastRefresh = 0;
@@ -130,6 +130,16 @@ public class MCServerTrackerActivity extends ListActivity {
 	}
 
 	/**
+	 * @see android.app.ListActivity#onDestroy()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onDestroy() {
+		new SaveServerListTask(getApplicationContext()).execute(serverList.getServerList());
+		super.onDestroy();
+	}
+
+	/**
 	 * @see android.app.Activity#onCreateDialog(int)
 	 */
 	@Override
@@ -197,6 +207,19 @@ public class MCServerTrackerActivity extends ListActivity {
       super.onCreateContextMenu(menu, v, menuInfo);
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.server_context, menu);
+      final AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+     
+      Server server = serverList.getItem(info.position);
+      
+      
+      
+      if (!server.favorite) {
+    	  menu.add(Menu.NONE, 124, Menu.NONE, R.string.favorites_add);
+    	  
+      } else {
+    	  menu.add(Menu.NONE, 124, Menu.NONE, R.string.favorites_remove);
+      }
+ 
     }
     
     /**
@@ -228,6 +251,7 @@ public class MCServerTrackerActivity extends ListActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
       final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+      
       switch (item.getItemId()) {
       case R.id.context_copy:
     	  Server server = serverList.getItem(info.position);
@@ -241,6 +265,11 @@ public class MCServerTrackerActivity extends ListActivity {
           return true;
       case R.id.context_edit:
     	  editServer(info.position);
+    	  return true;
+      case 124:
+    	  Server s = serverList.getItem(info.position);
+    	  s.favorite = !s.favorite;
+    	  serverList.sort();
     	  return true;
       default:
         return super.onContextItemSelected(item);

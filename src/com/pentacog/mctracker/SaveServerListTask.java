@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nz.co.pentacog.mctracker;
+package com.pentacog.mctracker;
 
 import java.io.BufferedWriter;
 import java.io.File;

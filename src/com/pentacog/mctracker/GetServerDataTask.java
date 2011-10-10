@@ -1,13 +1,15 @@
 /**
  * 
  */
-package nz.co.pentacog.mctracker;
+package com.pentacog.mctracker;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import android.os.AsyncTask;
@@ -18,6 +20,7 @@ import android.os.AsyncTask;
  */
 public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 
+	private static final int SOCKET_TIMEOUT = 10000;
 	private Server server = null;
 	private ServerDataResultHandler handler = null;
 	/**
@@ -53,14 +56,21 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			
 			String[] parts = null;
 			byte[] bytes = new byte[128];
+//			ByteBuffer b = ByteBuffer.allocate(512);
 			Socket sock = new Socket(server.address, server.port);
+			sock.setSoTimeout(SOCKET_TIMEOUT);
 			OutputStream os = sock.getOutputStream();
 			InputStream is = sock.getInputStream();
 			
 			requestTime = System.currentTimeMillis();
 			os.write(MCServerTrackerActivity.PACKET_REQUEST_CODE);
 			is.read(bytes);
+			//TODO allow for reading of multiple packets
+//			while (is.read(bytes) != -1) {
+//				b.put(bytes);
+//			}
 			requestTime = System.currentTimeMillis() - requestTime;
+			
 			ByteBuffer b = ByteBuffer.wrap(bytes);
 			b.get();
 			short stringLen = b.getShort();
@@ -88,7 +98,16 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			}
 			
 		} catch (IOException e) {
-			error = e.getLocalizedMessage();
+			//TODO move to strings.xml
+			if (e instanceof SocketTimeoutException) {
+				error = "Connection timed out";
+			} else if (e instanceof UnknownHostException) {
+				error = "Unable to resolve DNS";
+			} else if (e.getMessage().endsWith("Connection refused")) {
+				error = "Connection refused";
+			} else {
+				error = e.getMessage();
+			}
 		}
 		server.queried = true;
 		if (error != null) {

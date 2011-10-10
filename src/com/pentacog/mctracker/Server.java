@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nz.co.pentacog.mctracker;
+package com.pentacog.mctracker;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nz.co.pentacog.mctracker;
+package com.pentacog.mctracker;
 
 import android.app.Activity;
 import android.content.Intent;

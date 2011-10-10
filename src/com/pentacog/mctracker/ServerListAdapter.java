@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nz.co.pentacog.mctracker;
+package com.pentacog.mctracker;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import nz.co.pentacog.mctracker.GetServerDataTask.ServerDataResultHandler;
+import com.pentacog.mctracker.GetServerDataTask.ServerDataResultHandler;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,7 +129,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		
 		
 		//set server name
-		holder.serverTitle.setText(server.name);
+		holder.serverTitle.setText(server.name + (server.favorite?"*":""));
 		//set server IP
 		String serverName = server.address.toString();
 		if (!serverName.startsWith("/")) {
@@ -234,9 +234,9 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 			public int compare(Server object1, Server object2) {
 				
 				if (object1.favorite && !object2.favorite) {
-					return 1;
-				} else if (object2.favorite && !object1.favorite) {
 					return -1;
+				} else if (object2.favorite && !object1.favorite) {
+					return 1;
 				}
 				
 				return object1.name.compareTo(object2.name);
