@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Minecraft Server Tracker</string>
+    <string name="app_name">ServerCraft</string>
     <string name="server_version_error">Server is running an incompatible version</string>
     <string name="delete_caution">Are you sure that you want to remove this server?</string>
     <string name="yes">Yes</string>

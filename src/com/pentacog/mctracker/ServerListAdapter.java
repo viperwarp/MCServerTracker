@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -129,7 +130,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		
 		
 		//set server name
-		holder.serverTitle.setText(server.name + (server.favorite?"*":""));
+		holder.serverTitle.setText(server.name);
 		//set server IP
 		String serverName = server.address.toString();
 		if (!serverName.startsWith("/")) {
@@ -143,7 +144,15 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		} else {
 			serverName = serverName.replace("/", "");
 		}
-		holder.serverIp.setText(serverName + ":" + server.port);
+		if (server.port != 25565)serverName += ":" + server.port;
+		holder.serverIp.setText(serverName);
+		
+		//set fav icon
+		if (server.favorite) {
+			holder.favStar.setVisibility(View.VISIBLE);
+		} else {
+			holder.favStar.setVisibility(View.INVISIBLE);
+		}
 		
 		if (!server.queried) {
 			holder.loading.setVisibility(View.VISIBLE);
@@ -255,6 +264,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		public TextView playerCount;
 		public TextView serverData;
 		public TextView ping;
+		public ImageView favStar;
 		public ProgressBar loading;
 		
 		ServerViewHolder(int id, View serverView) {
@@ -265,6 +275,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 			serverData = (TextView) serverView.findViewById(R.id.serverData);
 			loading = (ProgressBar) serverView.findViewById(R.id.updating_server);
 			ping = (TextView) serverView.findViewById(R.id.ping);
+			favStar = (ImageView) serverView.findViewById(R.id.favStar);
 		}
 	}
 

@@ -10,4 +10,5 @@
     <ProgressBar android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_centerVertical="true" android:layout_alignParentLeft="true" android:paddingRight="10dp" android:id="@+id/updating_server" android:visibility="gone"></ProgressBar>
     <TextView android:text="serverTitle" style="?android:attr/textAppearanceLarge" android:id="@+id/serverTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignWithParentIfMissing="true" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/updating_server"></TextView>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/playerCount" android:layout_alignParentRight="true" android:id="@+id/ping" android:text="0ms"></TextView>
+    <ImageView android:src="@drawable/favstar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/favStar" android:layout_toRightOf="@+id/serverTitle" android:layout_alignBottom="@+id/serverTitle" android:layout_marginBottom="2dp" android:layout_marginLeft="2dp"></ImageView>
 </RelativeLayout>

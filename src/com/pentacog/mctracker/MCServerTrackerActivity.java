@@ -284,7 +284,7 @@ public class MCServerTrackerActivity extends ListActivity {
 				
 		if (keyCode == KeyEvent.KEYCODE_SEARCH) {
 			InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        	mgr.showSoftInput(getListView(), InputMethodManager.SHOW_FORCED);
+        	mgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         	return true;
 		}
 		return super.onKeyDown(keyCode, event);

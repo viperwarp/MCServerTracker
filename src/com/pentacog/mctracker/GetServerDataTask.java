@@ -30,8 +30,6 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 		this.server = server;
 		this.handler = handler;
 	}
-	
-	
 
 	/**
 	 * @see android.os.AsyncTask#onPreExecute()
@@ -41,9 +39,7 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 		super.onPreExecute();
 		
 	}
-
-
-
+	
 	/**
 	 * @see android.os.AsyncTask#doInBackground(Params[])
 	 */
@@ -55,37 +51,53 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			long requestTime = 0;
 			
 			String[] parts = null;
-			byte[] bytes = new byte[128];
-//			ByteBuffer b = ByteBuffer.allocate(512);
+			byte[] bytes = new byte[256];
 			Socket sock = new Socket(server.address, server.port);
 			sock.setSoTimeout(SOCKET_TIMEOUT);
 			OutputStream os = sock.getOutputStream();
 			InputStream is = sock.getInputStream();
+			String message = "";
+			
 			
 			requestTime = System.currentTimeMillis();
 			os.write(MCServerTrackerActivity.PACKET_REQUEST_CODE);
+			
 			is.read(bytes);
-			//TODO allow for reading of multiple packets
-//			while (is.read(bytes) != -1) {
-//				b.put(bytes);
-//			}
-			requestTime = System.currentTimeMillis() - requestTime;
+			if (requestTime > SOCKET_TIMEOUT)
+				requestTime = System.currentTimeMillis() - requestTime;
 			
 			ByteBuffer b = ByteBuffer.wrap(bytes);
-			b.get();
+			b.get(); //remove first byte
 			short stringLen = b.getShort();
-			byte[] stringData = new byte[stringLen * 2];
-			b.get(stringData);
-
-			sock.close();
+			byte[] stringData = new byte[Math.min(stringLen * 2, 253)];
 			
-			String message = "";
+			b.get(stringData);
 			try {
 				message = new String(stringData, "UTF-16BE");
 			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				//Nothing I can really do here
 			}
- 
+			
+			//Experimental multi-packet support
+//			while (is.read(bytes) != -1) {
+//				//if requestTime hasn't be calculated yet
+//				if (requestTime > SOCKET_TIMEOUT)
+//					requestTime = System.currentTimeMillis() - requestTime;
+//				
+//				ByteBuffer b = ByteBuffer.wrap(bytes);
+//				b.get(); //remove first byte
+//				short stringLen = b.getShort();
+//				byte[] stringData = new byte[stringLen * 2];
+//				b.get(stringData);
+//				
+//				try {
+//					message += new String(stringData, "UTF-16BE");
+//				} catch (UnsupportedEncodingException e) {
+//					e.printStackTrace();
+//				}
+//				
+//			}
+			sock.close();
 			parts = message.split("\u00A7");
 			
 			if (parts.length == 3) {
@@ -94,11 +106,10 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 				server.maxPlayers = Integer.parseInt(parts[2]);
 				server.ping = (int)requestTime;
 			} else {
-				error = "Server is running an incompatible version";
+				throw new IllegalArgumentException();
 			}
 			
 		} catch (IOException e) {
-			//TODO move to strings.xml
 			if (e instanceof SocketTimeoutException) {
 				error = "Connection timed out";
 			} else if (e instanceof UnknownHostException) {
@@ -108,6 +119,8 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			} else {
 				error = e.getMessage();
 			}
+		} catch (IllegalArgumentException e) {
+			error = "Communication error";
 		}
 		server.queried = true;
 		if (error != null) {
