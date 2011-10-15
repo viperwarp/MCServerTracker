@@ -124,7 +124,7 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 		}
 		server.queried = true;
 		if (error != null) {
-			server.motd = error;
+			server.motd = MCServerTrackerActivity.ERROR_CHAR + error;
 		}
 		
 		return error;

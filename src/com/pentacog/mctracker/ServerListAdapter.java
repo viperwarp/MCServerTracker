@@ -13,9 +13,12 @@ import org.json.JSONObject;
 
 import com.pentacog.mctracker.GetServerDataTask.ServerDataResultHandler;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -29,6 +32,8 @@ import android.widget.TextView;
  *
  */
 public class ServerListAdapter extends BaseAdapter implements Filterable {
+	
+	
 	
 	private ArrayList<Server> mOriginalValues = null;
 	private ArrayList<Server> serverList = null;
@@ -155,15 +160,19 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		}
 		
 		if (!server.queried) {
-			holder.loading.setVisibility(View.VISIBLE);
+			AlphaAnimation a = new AlphaAnimation(1.0f, 0.2f);
+			a.setRepeatCount(Animation.INFINITE);
+			a.setRepeatMode(Animation.REVERSE);
+			a.setDuration(300);
+			holder.statusBar.setBackgroundColor(Color.BLUE);
+			holder.statusBar.startAnimation(a);
+			
+//			holder.loading.setVisibility(View.VISIBLE);
 			holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
 			holder.serverData.setText(R.string.loading);
 			new ServerViewUpdater(serverView, server);
 		} else {
-			holder.loading.setVisibility(View.GONE);
-			holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
-			holder.serverData.setText(server.motd);
-			holder.ping.setText("" + server.ping + "ms");
+			setupServerCell(server, holder);
 		}
 		
 		return serverView;
@@ -265,6 +274,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		public TextView serverData;
 		public TextView ping;
 		public ImageView favStar;
+		public ImageView statusBar;
 		public ProgressBar loading;
 		
 		ServerViewHolder(int id, View serverView) {
@@ -276,6 +286,7 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 			loading = (ProgressBar) serverView.findViewById(R.id.updating_server);
 			ping = (TextView) serverView.findViewById(R.id.ping);
 			favStar = (ImageView) serverView.findViewById(R.id.favStar);
+			statusBar = (ImageView) serverView.findViewById(R.id.statusBar);
 		}
 	}
 
@@ -291,22 +302,34 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		public void onServerDataResult(Server server, String result) {
 			ServerViewHolder holder = (ServerViewHolder) view.getTag();
 			if (holder.id == server.id) {
-				holder.loading.setVisibility(View.GONE);
-				holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
-				holder.ping.setText("" + server.ping + "ms");
-				/*
-				 * No Internet = "Network Unreachable"
-				 * open port but no server = "The operation timed out"
-				 * No open ports = <address> - Connection refused
-				 */
-				
-				holder.serverData.setText(server.motd);
+				setupServerCell(server, holder);
 			} else {
 				server.queried = false;
 			}
 
 		}
 		
+		
+	}
+	
+	private void setupServerCell(Server server, ServerViewHolder holder) {
+		
+		
+		/*
+		 * No Internet = "Network Unreachable"
+		 * open port but no server = "The operation timed out"
+		 * No open ports = <address> - Connection refused
+		 */
+		Animation a = holder.statusBar.getAnimation();
+		if (a != null) { a.cancel(); a.reset(); }
+		if (server.motd.startsWith(MCServerTrackerActivity.ERROR_CHAR)) {
+			holder.statusBar.setBackgroundColor(Color.RED);
+		} else {
+			holder.statusBar.setBackgroundColor(Color.GREEN);
+		}
+		holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
+		holder.serverData.setText(server.motd);
+		holder.ping.setText("" + server.ping + "ms");
 		
 	}
 	

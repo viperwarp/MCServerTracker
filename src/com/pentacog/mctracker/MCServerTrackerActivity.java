@@ -39,6 +39,7 @@ public class MCServerTrackerActivity extends ListActivity {
 	private static final int IO_ERROR_DIALOG = 20;
 	private static final int NO_SERVER_DIALOG = 30;
 	private static final int SERVER_REFRESH_RATE = 300000;
+	public static final String ERROR_CHAR = "\u200B";
 	
 	private static ServerListAdapter serverList = null;
 	private static long lastRefresh = 0;
