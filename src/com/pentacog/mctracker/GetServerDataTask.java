@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * @author Affian
@@ -46,7 +47,8 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 	@Override
 	protected String doInBackground(Void... params) {
 		String error = null;
-		
+		String message = "";
+		short stringLen = -1;
 		try {
 			long requestTime = 0;
 			
@@ -56,7 +58,7 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			sock.setSoTimeout(SOCKET_TIMEOUT);
 			OutputStream os = sock.getOutputStream();
 			InputStream is = sock.getInputStream();
-			String message = "";
+			
 			
 			
 			requestTime = System.currentTimeMillis();
@@ -68,7 +70,7 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			
 			ByteBuffer b = ByteBuffer.wrap(bytes);
 			b.get(); //remove first byte
-			short stringLen = b.getShort();
+			stringLen = b.getShort();
 			byte[] stringData = new byte[Math.min(stringLen * 2, 253)];
 			
 			b.get(stringData);
@@ -119,8 +121,11 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			} else {
 				error = e.getMessage();
 			}
+			
 		} catch (IllegalArgumentException e) {
 			error = "Communication error";
+			Log.d("MCT", "Communication error: \"" + message + "\". Message Length: " + stringLen);
+			Log.d("MCT", server.toString());
 		}
 		server.queried = true;
 		if (error != null) {

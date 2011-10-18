@@ -12,23 +12,27 @@ import org.json.JSONObject;
  */
 public class Server {
 	
+	/* Value Tags */
 	public static final String SERVER_NAME = "serverName";
 	public static final String SERVER_ADDRESS = "serverAddress";
 	public static final String SERVER_PORT = "serverPort";
 	public static final String SERVER_ID = "serverId";
 	public static final String SERVER_FAVORITE = "serverFavorite";
 	
+	/* Persistent Data */
 	public String name = "Undefined";
 	public String address = "Undefined";
 	public int port = 25565;
+	public boolean favorite = false;
 	
-	public int id = -1;
+	/* Transient Data */
+	public int id = -1; //currently sync to the servers location in the list
 	public int ping = 0;
 	public int playerCount = 0;
 	public int maxPlayers = 0;
 	public String motd = "";
 	public boolean queried = false;
-	public boolean favorite = false;
+	
 
 	/**
 	 * 
