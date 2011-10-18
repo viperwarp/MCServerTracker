@@ -170,6 +170,8 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 //			holder.loading.setVisibility(View.VISIBLE);
 			holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
 			holder.serverData.setText(R.string.loading);
+			holder.playerCount.setVisibility(View.INVISIBLE);
+			holder.ping.setVisibility(View.INVISIBLE);
 			new ServerViewUpdater(serverView, server);
 		} else {
 			setupServerCell(server, holder);
@@ -324,8 +326,12 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		if (a != null) { a.cancel(); a.reset(); }
 		if (server.motd.startsWith(MCServerTrackerActivity.ERROR_CHAR)) {
 			holder.statusBar.setBackgroundColor(Color.RED);
+			holder.playerCount.setVisibility(View.INVISIBLE);
+			holder.ping.setVisibility(View.INVISIBLE);
 		} else {
 			holder.statusBar.setBackgroundColor(Color.GREEN);
+			holder.playerCount.setVisibility(View.VISIBLE);
+			holder.ping.setVisibility(View.VISIBLE);
 		}
 		holder.playerCount.setText("" + server.playerCount + "/" + server.maxPlayers);
 		holder.serverData.setText(server.motd);
