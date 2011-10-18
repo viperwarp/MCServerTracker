@@ -323,7 +323,10 @@ public class ServerListAdapter extends BaseAdapter implements Filterable {
 		 * No open ports = <address> - Connection refused
 		 */
 		Animation a = holder.statusBar.getAnimation();
-		if (a != null) { a.cancel(); a.reset(); }
+		if (a != null) { 
+			a.reset(); 
+			holder.statusBar.clearAnimation();
+		}
 		if (server.motd.startsWith(MCServerTrackerActivity.ERROR_CHAR)) {
 			holder.statusBar.setBackgroundColor(Color.RED);
 			holder.playerCount.setVisibility(View.INVISIBLE);
