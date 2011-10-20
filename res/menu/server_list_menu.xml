@@ -2,7 +2,7 @@
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_add_server" android:title="@string/add_server" android:icon="@drawable/ic_menu_add" android:showAsAction="withText|ifRoom"></item>
-    <item android:id="@+id/menu_refresh" android:title="@string/refresh" android:icon="@drawable/ic_menu_refresh" android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/menu_refresh" android:title="@string/refresh" android:icon="@drawable/ic_menu_refresh" android:showAsAction="always"></item>
     <item android:title="@string/search" android:id="@+id/menu_search" android:icon="@drawable/ic_menu_search" android:showAsAction="ifRoom"></item>
     
 </menu>

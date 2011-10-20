@@ -1,5 +1,7 @@
-/**
- * 
+/*
+ * This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 New Zealand License. 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/nz/ or send a 
+ * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 package com.pentacog.mctracker;
 
@@ -14,7 +16,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 /**
- * @author macpro
+ * @author Affian
  *
  */
 public class SaveServerListTask extends AsyncTask<ArrayList<Server>, Void, Void> {
@@ -38,7 +40,7 @@ public class SaveServerListTask extends AsyncTask<ArrayList<Server>, Void, Void>
 			if (!serverFile.exists()) {
 				serverFile.createNewFile();
 			}
-			BufferedWriter bw = new BufferedWriter(new FileWriter(serverFile));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(serverFile), 4000);
 			
 			JSONArray array = new JSONArray();
 			for (Server server : params[0]) {

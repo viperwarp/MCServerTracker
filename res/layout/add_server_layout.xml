@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/dirt_tile">
+	android:layout_height="fill_parent" android:paddingLeft="10dp" android:paddingRight="10dp" android:background="@drawable/dirt_tile">
 	<TextView android:id="@+id/textView1" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="@string/server_name" android:paddingTop="5dp"></TextView>
 	<EditText android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:hint="Server Name" android:id="@+id/serverNameEdit" android:inputType="textCapSentences" android:lines="1">
+		android:layout_height="wrap_content" android:hint="Minecraft server" android:id="@+id/serverNameEdit" android:inputType="textCapSentences" android:lines="1">
 		<requestFocus></requestFocus>
 	</EditText>
 	<TextView android:id="@+id/textView2" android:layout_width="wrap_content"

@@ -1,3 +1,9 @@
+/*
+ * This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 New Zealand License. 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/nz/ or send a 
+ * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+ */
+
 package com.pentacog.mctracker;
 
 import java.io.BufferedReader;
@@ -31,6 +37,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+/**
+ * 
+ * @author Affian
+ *
+ */
 public class MCServerTrackerActivity extends ListActivity {
 	
 	public static final int PACKET_REQUEST_CODE = 254;
@@ -76,7 +87,7 @@ public class MCServerTrackerActivity extends ListActivity {
 			    if (instream != null) {
 			        // prepare the file for reading
 			        InputStreamReader inputreader = new InputStreamReader(instream);
-			        BufferedReader br = new BufferedReader(inputreader);
+			        BufferedReader br = new BufferedReader(inputreader, 4000);
 				
 					JSONArray servers = null;
 					String jsonOutput = "";
@@ -249,7 +260,7 @@ public class MCServerTrackerActivity extends ListActivity {
     /**
      * @see android.app.Activity#onContextItemSelected(MenuItem item)
      */
-    @Override
+	@Override
     public boolean onContextItemSelected(MenuItem item) {
       final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
       

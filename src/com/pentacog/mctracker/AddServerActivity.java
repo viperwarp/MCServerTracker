@@ -1,5 +1,7 @@
-/**
- * 
+/*
+ * This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 New Zealand License. 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/nz/ or send a 
+ * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 package com.pentacog.mctracker;
 
@@ -47,9 +49,12 @@ public class AddServerActivity extends Activity {
 		TextView serverAddress = (TextView) this.findViewById(R.id.serverAddressEdit);
 		TextView serverPort = (TextView) this.findViewById(R.id.serverPortEdit);
 		
+		String name = serverName.getText().toString();
+		if (name.equals("")) name = "Minecraft server";
+		
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(Server.SERVER_ID, serverId);
-		resultIntent.putExtra(Server.SERVER_NAME, serverName.getText().toString());
+		resultIntent.putExtra(Server.SERVER_NAME, name);
 		resultIntent.putExtra(Server.SERVER_ADDRESS, serverAddress.getText().toString());
 		resultIntent.putExtra(Server.SERVER_PORT, serverPort.getText().toString());
 		setResult(Activity.RESULT_OK, resultIntent);
