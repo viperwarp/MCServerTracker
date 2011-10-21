@@ -126,8 +126,8 @@ public class GetServerDataTask extends AsyncTask<Void, Void, String> {
 			
 		} catch (IllegalArgumentException e) {
 			error = "Communication error";
-			Log.d("MCT", "Communication error: \"" + message + "\". Message Length: " + stringLen);
-			Log.d("MCT", server.toString());
+//			Log.d("MCT", "Communication error: \"" + message + "\". Message Length: " + stringLen);
+//			Log.d("MCT", server.toString());
 		}
 		server.queried = true;
 		if (error != null) {
