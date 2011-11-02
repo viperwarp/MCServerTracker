@@ -42,6 +42,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
  * @author Affian
  *
  */
+@SuppressWarnings("deprecation")
 public class MCServerTrackerActivity extends ListActivity {
 	
 	public static final int PACKET_REQUEST_CODE = 254;

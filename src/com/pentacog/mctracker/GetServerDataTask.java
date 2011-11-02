@@ -15,7 +15,6 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * @author Affian

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="1" package="com.pentacog.mctracker" android:versionName="1.0" android:installLocation="auto">
+      android:versionCode="2" package="com.pentacog.mctracker" android:versionName="1.1" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11"/>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
@@ -13,6 +13,13 @@
             </intent-filter>
         </activity>
         <activity android:name="com.pentacog.mctracker.AddServerActivity"></activity>
-
+		<receiver android:name="ServerCraftWidget" >
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/appwidget_info" />
+		</receiver>
     </application>
+    
 </manifest>
