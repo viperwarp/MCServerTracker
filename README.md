@@ -16,7 +16,7 @@ Features
 * Supports Android 1.6 -> 4.0
 * Copy/Paste server address from the list
 * Server ping shown in Milliseconds
-* Search on your sever list
+* Search on your server list
 
 On-going Development
 --------------------
