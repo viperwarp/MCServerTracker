@@ -42,6 +42,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
  * @author Affian
  *
  */
+@SuppressWarnings("deprecation")
 public class MCServerTrackerActivity extends ListActivity {
 	
 	public static final int PACKET_REQUEST_CODE = 254;
@@ -357,13 +358,21 @@ public class MCServerTrackerActivity extends ListActivity {
 			
 			if (serverId == -1) {
 				Server newServer = new Server(serverName, serverAddress);
-				newServer.port = Integer.parseInt(serverPort);
+				try {
+					newServer.port = Integer.parseInt(serverPort);
+				} catch (NumberFormatException e) {
+					
+				}
 				getServerData(newServer);
 			} else {
 				Server server = serverList.getItem(serverId);
 				server.name = serverName;
 				server.address = serverAddress;
-				server.port = Integer.parseInt(serverPort);
+				try {
+					server.port = Integer.parseInt(serverPort);
+				} catch (NumberFormatException e) {
+					
+				}
 				server.queried = false;
 				serverList.sort();
 			}
