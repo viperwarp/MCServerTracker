@@ -14,6 +14,8 @@ import org.json.JSONObject;
  */
 public class Server {
 	
+	public static final int DEFAULT_PORT = 25565;
+	
 	/* Value Tags */
 	public static final String SERVER_NAME = "serverName";
 	public static final String SERVER_ADDRESS = "serverAddress";
@@ -24,7 +26,7 @@ public class Server {
 	/* Persistent Data */
 	public String name = "Undefined";
 	public String address = "Undefined";
-	public int port = 25565;
+	public int port = DEFAULT_PORT;
 	public boolean favorite = false;
 	
 	/* Transient Data */
@@ -47,14 +49,8 @@ public class Server {
 	public Server(JSONObject obj) throws JSONException {
 			this.name = obj.getString(SERVER_NAME);
 			this.address = obj.getString(SERVER_ADDRESS);
-			this.port = obj.getInt(SERVER_PORT);
-			
-			//exception handling optional JSON values
-			try {
-				this.favorite = obj.getBoolean(SERVER_FAVORITE);
-			} catch (JSONException e) {
-				//Continue silently
-			}
+			this.port = obj.optInt(SERVER_PORT, DEFAULT_PORT);
+			this.favorite = obj.optBoolean(SERVER_FAVORITE, false);
 	}
 	
 	public String toString() {
