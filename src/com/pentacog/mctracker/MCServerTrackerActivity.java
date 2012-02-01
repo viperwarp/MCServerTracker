@@ -408,14 +408,16 @@ public class MCServerTrackerActivity extends ListActivity {
 							getServerData(server);
 						}
 					});
-					builder.setNegativeButton("Cancel", new OnClickListener() {
+					builder.setNeutralButton("Add Server", new OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
+							serverList.add(server);
+							new SaveServerListTask(getApplicationContext()).execute(serverList.getServerList());
+							updateListView();
 						}
 					});
-					builder.setNeutralButton("Back", new OnClickListener() {
+					builder.setNegativeButton("Back", new OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {

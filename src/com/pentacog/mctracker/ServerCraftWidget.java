@@ -104,6 +104,7 @@ public class ServerCraftWidget extends AppWidgetProvider {
 				views.setTextViewText(R.id.widgetPlayerCount, "" + server.playerCount +"/" + server.maxPlayers);
 			} else {
 				views.setTextViewText(R.id.widgetMOTD, result);
+				views.setTextViewText(R.id.widgetPlayerCount, "");
 			}
 			appWidgetManager.updateAppWidget(id, views);
 		}
