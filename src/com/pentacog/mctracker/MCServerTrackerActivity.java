@@ -297,8 +297,8 @@ public class MCServerTrackerActivity extends ListActivity {
 				
 		if (keyCode == KeyEvent.KEYCODE_SEARCH) {
 			InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        	mgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        	return true;
+        		mgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        		return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -421,12 +421,12 @@ public class MCServerTrackerActivity extends ListActivity {
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
 							Intent addServer = new Intent(MCServerTrackerActivity.this, AddServerActivity.class);
-					    	addServer.putExtra(Server.SERVER_ID, server.id);
-					    	addServer.putExtra(Server.SERVER_NAME, server.name);
-					    	addServer.putExtra(Server.SERVER_ADDRESS, server.address);
-					    	addServer.putExtra(Server.SERVER_PORT, "" + server.port);
+					    		addServer.putExtra(Server.SERVER_ID, server.id);
+					    		addServer.putExtra(Server.SERVER_NAME, server.name);
+					    		addServer.putExtra(Server.SERVER_ADDRESS, server.address);
+					    		addServer.putExtra(Server.SERVER_PORT, "" + server.port);
 					    	
-					        startActivityForResult(addServer, AddServerActivity.ADD_SERVER_ACTIVITY_ID);
+					        	startActivityForResult(addServer, AddServerActivity.ADD_SERVER_ACTIVITY_ID);
 						}
 					});
 					
