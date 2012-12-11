@@ -16,26 +16,27 @@ import org.json.JSONException;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 /**
  * 
@@ -43,7 +44,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
  *
  */
 @SuppressWarnings("deprecation")
-public class MCServerTrackerActivity extends ListActivity {
+public class MCServerTrackerActivity extends SherlockListActivity {
 	
 	public static final int PACKET_REQUEST_CODE = 254;
 	public static final String SERVER_CACHE_FILE = "mcTrackerServerCache.json";
@@ -207,7 +208,7 @@ public class MCServerTrackerActivity extends ListActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.server_list_menu, menu);
         return true;
     }
@@ -218,7 +219,7 @@ public class MCServerTrackerActivity extends ListActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
       super.onCreateContextMenu(menu, v, menuInfo);
-      MenuInflater inflater = getMenuInflater();
+   	  android.view.MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.server_context, menu);
       final AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
      
@@ -262,7 +263,7 @@ public class MCServerTrackerActivity extends ListActivity {
      * @see android.app.Activity#onContextItemSelected(MenuItem item)
      */
 	@Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(android.view.MenuItem item) {
       final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
       
       switch (item.getItemId()) {

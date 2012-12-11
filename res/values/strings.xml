@@ -23,4 +23,6 @@
     <string name="search">Search</string>
     <string name="favorites_add">Add to favorites</string>
     <string name="favorites_remove">Remove from favorites</string>
+    <string name="favorite">Favorite</string>
+    <string name="status_bar">Status Bar</string>
 </resources>
