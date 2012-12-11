@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:layout_margin="7dp"
+    android:focusable="true">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@drawable/appwidget_bg"
+      android:orientation="vertical" android:padding="5dp" android:id="@+id/widgetLinearLayout">
+
+      <TextView
+          android:id="@+id/widgetServerTitle"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:text="Loading..." 
+          android:lines="1"
+          android:ellipsize="end" android:textColor="#fff" android:textSize="15dp"/>
+
+      <TextView
+          android:id="@+id/widgetMOTD"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="" 
+          android:scrollHorizontally="true" 
+          android:lines="1" 
+          android:ellipsize="marquee" 
+          android:focusable="true" 
+          android:focusableInTouchMode="true" 
+          android:marqueeRepeatLimit="marquee_forever" android:layout_marginTop="4dp">
+          <requestFocus 
+              android:focusable="true" 
+              android:focusableInTouchMode="true"
+			  android:duplicateParentState="true" 
+		  />
+      </TextView>
+          
+      <TextView
+          android:id="@+id/widgetPlayerCount"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="" />
+
+  </LinearLayout>
+    
+
+</FrameLayout>
