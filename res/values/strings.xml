@@ -25,4 +25,7 @@
     <string name="favorites_remove">Remove from favorites</string>
     <string name="favorite">Favorite</string>
     <string name="status_bar">Status Bar</string>
+    <string name="minecraft_server">Minecraft server</string>
+    <string name="server_ip_url">Server IP/URL</string>
+    <string name="default_port">25565</string>
 </resources>

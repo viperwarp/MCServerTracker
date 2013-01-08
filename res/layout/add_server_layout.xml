@@ -1,24 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:paddingLeft="10dp" android:paddingRight="10dp" android:background="@drawable/dirt_tile">
-	<TextView android:id="@+id/textView1" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="@string/server_name" android:paddingTop="5dp"></TextView>
-	<EditText android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:hint="Minecraft server" android:id="@+id/serverNameEdit" android:inputType="textCapSentences" android:lines="1">
-		<requestFocus></requestFocus>
-	</EditText>
-	<TextView android:id="@+id/textView2" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="@string/server_address" android:paddingTop="5dp"></TextView>
-	<EditText android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:hint="Server IP/URL" android:id="@+id/serverAddressEdit" android:maxLines="1" android:inputType="textUri"></EditText>
-	<TextView android:id="@+id/textView3" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="@string/server_port" android:paddingTop="5dp"></TextView>
-	<EditText android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:inputType="number" android:text="25565" android:id="@+id/serverPortEdit" android:lines="1"></EditText>
-	<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:layout_gravity="center"
-		android:id="@+id/submitButton" android:text="@string/add_server"
-		android:onClick="submit" android:layout_marginTop="5dp"></Button>
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/dirt_tile"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:textColor="@android:color/white"
+        android:text="@string/server_name" >
+    </TextView>
+
+    <EditText
+        android:id="@+id/serverNameEdit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/minecraft_server"
+        android:inputType="textCapSentences"
+        android:lines="1" >
+
+        <requestFocus>
+        </requestFocus>
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:textColor="@android:color/white"
+        android:text="@string/server_address" >
+    </TextView>
+
+    <EditText
+        android:id="@+id/serverAddressEdit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/server_ip_url"
+        android:inputType="textUri"
+        android:maxLines="1" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:textColor="@android:color/white"
+        android:text="@string/server_port" >
+    </TextView>
+
+    <EditText
+        android:id="@+id/serverPortEdit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:lines="1"
+        android:text="@string/default_port" >
+    </EditText>
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:onClick="submit"
+        android:text="@string/add_server" >
+    </Button>
 
 </LinearLayout>

@@ -5,6 +5,10 @@
  */
 package com.pentacog.mctracker;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +20,7 @@ import android.widget.TextView;
  * @author Affian
  *
  */
-public class AddServerActivity extends Activity {
+public class AddServerActivity extends SherlockActivity {
 
 	public static final int ADD_SERVER_ACTIVITY_ID = 10;
 	
@@ -26,6 +30,9 @@ public class AddServerActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.add_server_layout);
+		
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
@@ -42,6 +49,19 @@ public class AddServerActivity extends Activity {
 			Button submitButton = (Button)findViewById(R.id.submitButton);
 			submitButton.setText(R.string.edit_server);
 		}
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
+		default:
+			break;
+		}
+		
+		return true;
 	}
 	
 	public void submit(View view) {
